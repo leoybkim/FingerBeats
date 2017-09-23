@@ -1,0 +1,1 @@
+Hack projects for HackRice7 using Leap Motion.
