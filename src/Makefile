@@ -13,7 +13,7 @@ else
 endif
 
 Sample: Sample.cpp
-	$(CXX) -Wall -g -I../include Sample.cpp -o Sample $(LEAP_LIBRARY)
+	$(CXX) -Wall -g -std=c++11 -I../include Sample.cpp -o Sample $(LEAP_LIBRARY)
 ifeq ($(OS), Darwin)
 	install_name_tool -change @loader_path/libLeap.dylib ../lib/libLeap.dylib Sample
 endif
