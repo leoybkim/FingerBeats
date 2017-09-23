@@ -1,10 +1,33 @@
 #include <iostream>
 #include <string.h>
 #include "../lib/Leap.h"
+#include <thread>
+#include <unistd.h>
+#include <errno.h>
 
 using namespace Leap;
 
 const std::string stateNames[] = {"STATE_INVALID", "STATE_START", "STATE_UPDATE", "STATE_END"};
+const std::string beatNames[] = {"closed-hi-hat", "kickA", "kickB", "open-hi-hat", "snare"};
+int beat_index = -1;
+int swipe_ctr = 0;
+int cir_ctr = 0;
+
+const int swipe_max = 14;
+const int cir_max = 32;
+
+void sound(int index) {
+    
+    int pid = fork();
+    if (pid == 0) {
+        std::string file = beatNames[index] + ".wav";
+        execlp("afplay", "afplay", file.c_str(), NULL);
+        std::cout << "Exec failed: " << strerror(errno) << std::endl;
+        exit(-1);
+    } else {
+        wait(&pid);
+    }
+}
 
 class SampleListener : public Listener {
     public:
@@ -20,6 +43,8 @@ void SampleListener::onConnect(const Controller& controller) {
 }
 
 void SampleListener::onFrame(const Controller& controller) {
+
+    beat_index = -1; // initialize it to unvalid value
     Frame frame = controller.frame();
     // Get gestures
     const GestureList gestures = frame.gestures();
@@ -29,7 +54,14 @@ void SampleListener::onFrame(const Controller& controller) {
     switch (gesture.type()) {
       case Gesture::TYPE_CIRCLE:
       {
-        system("afplay open-hi-hat.wav");
+
+        cir_ctr++;
+        if (cir_ctr == 3) {
+            beat_index = 3;
+        } else if (cir_ctr > cir_max) {
+            cir_ctr = 0;
+        }
+
         CircleGesture circle = gesture;
         std::string clockwiseness;
 
@@ -56,7 +88,14 @@ void SampleListener::onFrame(const Controller& controller) {
       }
       case Gesture::TYPE_SWIPE:
       {
-        system("afplay snare.wav");
+        
+        swipe_ctr++;
+        if (swipe_ctr == 1) {
+            beat_index = 4;
+        } else if (swipe_ctr > swipe_max) {
+            swipe_ctr = 0;
+        }
+   
         SwipeGesture swipe = gesture;
         std::cout << std::string(2, ' ')
           << "Swipe id: " << gesture.id()
@@ -67,7 +106,7 @@ void SampleListener::onFrame(const Controller& controller) {
       }
       case Gesture::TYPE_KEY_TAP:
       {
-        system("afplay closed-hi-hat.wav");
+        beat_index = 0;
         KeyTapGesture tap = gesture;
         std::cout << std::string(2, ' ')
           << "Key Tap id: " << gesture.id()
@@ -90,6 +129,10 @@ void SampleListener::onFrame(const Controller& controller) {
         std::cout << std::string(2, ' ')  << "Unknown gesture type." << std::endl;
         break;
     }
+    if (beat_index != -1) {
+        std::thread s1(sound, beat_index);
+        s1.detach();
+    }
   }
 }
 
@@ -98,6 +141,7 @@ int main (int argc, char** argv) {
     Controller controller;
 
     controller.addListener(lisenter);
+    system("osascript QTRecord.scpt");
 
     std::cout << "Press Enter to quit..." << std::endl;
     std::cin.get();
