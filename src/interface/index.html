@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html ng-app="fingerbeatsApp">
+<head>
+    <meta charset="UTF-8">
+    <title>FingerBeats</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+    <script type="text/javascript" src="app.module.js"></script>
+    <script type="text/javascript" src="optionController.js"></script>
+    <script type="text/javascript" src="firebaseService.js"></script>
+</head>
+
+<body ng-controller="optionController as main">
+
+    <div class="main">
+        <div class="main-container">
+            <!-- Stage 1 -->
+            <div ng-show="main.showStage1">
+                <h1>Finger Beats</h1>
+                <button ng-model="main.mainButton" class="button btn"
+                        nametag={{main.startText}} ng-click="main.function1()">
+                      <span class="btn-label">{{main.startText}}</span>
+                </button>
+            </div>
+
+            <!-- Stage 2 -->
+            <div ng-show="!main.showStage1 && main.showStage2 && !main.showStage3">
+                <button class="button btn" nametag="record" ng-model="main.record" ng-click="main.record(); main.function2()">
+                    <span class="btn-label">record</span>
+                </button>
+                <button class="button btn" nametag="replay" ng-model="main.replay" ng-click="main.replay(); main.function2()">
+                    <span class="btn-label">replay</span>
+                </button>
+                <button class="button btn" nametag="merge" ng-model="main.merge" ng-click="main.merge(); main.function2()">
+                    <span class="btn-label">merge</span>
+                </button>
+                <button class="button btn" nametag="replay merge" ng-model="main.replayMerge" ng-click="main.replayMerge(); main.function2()">
+                    <span class="btn-label">replay merge</span>
+                </button>
+                <button class="button btn" nametag="customize" ng-model="main.customize" ng-click="main.function2()">
+                    <span class="btn-label">customize</span>
+                </button>
+            </div>
+
+            <!-- Stage 3 -->
+            <div ng-show="!main.showStage1 && !main.showStage2 && main.showStage3">
+                <h1>Choose Three Sound</h1>
+                <button class="button btn" nametag="closed hi-hat" ng-model="main.closedHiHat"><span class="btn-label">closed hi-hat</span></button>
+                <button class="button btn" nametag="kick A" ng-model="main.kickA"><span class="btn-label">kick A</span></button>
+                <button class="button btn" nametag="kick B" ng-model="main.kickB"><span class="btn-label">kick B</span></button>
+                <button class="button btn" nametag="open hi-hat" ng-model="main.openHiHat"><span class="btn-label">open hi-hat</span></button>
+                <button class="button btn" nametag="snare" ng-model="main.snare"><span class="btn-label">snare</span></button>
+                <button class="button btn" nametag="awesome" ng-model="main.awesome"><span class="btn-label">awesome</span></button>
+                <button class="button btn" nametag="boing" ng-model="main.boing"><span class="btn-label">boing</span></button>
+                <button class="button btn" nametag="calc" ng-model="main.calc"><span class="btn-label">calc</span></button>
+                <button class="button btn" nametag="calc2" ng-model="main.calc2"><span class="btn-label">calc2</span></button>
+                <button class="button btn" nametag="cash" ng-model="main.cashReg"><span class="btn-label">cash</span></button>
+                <button class="button btn" nametag="conical" ng-model="main.conical"><span class="btn-label">conical</span></button>
+                <button class="button btn" nametag="spring B" ng-model="main.springB"><span class="btn-label">spring B</span></button>
+                <button class="button btn" nametag="tink" ng-model="main.tink"><span class="btn-label">tink</span></button>
+                <button class="button btn" nametag="twingy" ng-model="main.twingy"><span class="btn-label">twingy</span></button>
+                <button class="button btn" nametag="upper" ng-model="main.upper"><span class="btn-label">upper</span></button>
+                <button class="button btn" nametag="victory" ng-model="main.victory"><span class="btn-label">victory</span></button>
+                <button class="button btn" nametag="water" ng-model="main.waterGL"><span class="btn-label">water</span></button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDs1z_rse9upwSQM9Xy2wimuOxIGiQmxBI",
+    authDomain: "fingerbeats-a2bf3.firebaseapp.com",
+    databaseURL: "https://fingerbeats-a2bf3.firebaseio.com",
+    projectId: "fingerbeats-a2bf3",
+    storageBucket: "",
+    messagingSenderId: "18357362942"
+  };
+  firebase.initializeApp(config);
+</script>
+</html>

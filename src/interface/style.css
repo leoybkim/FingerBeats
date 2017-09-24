@@ -1,0 +1,121 @@
+body{
+  font-family: -Ubuntu, Helvetica Neue, sans-serif;
+  font-size: 1.6rem;
+  color: #222;
+  background-color: #178F5F;
+  margin: 0;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+}
+
+.main{
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.main-container{
+  max-width: 1200px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 32px;
+  font-family: Courier New;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.button{
+  padding: 8px 25px;
+  margin: 5px;
+  position: relative;
+  border: 2px solid #fff;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 40px;
+  font-family: inherit;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.button:focus{
+  outline: none;
+}
+
+.button:before{
+  content: attr(nametag);
+  overflow: hidden;
+  white-space: nowrap;
+  position: absolute;
+  top: 8px;
+  left: 25px;
+}
+
+.btn-label{
+  -moz-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+  -moz-text-stroke: 1px #fff;
+  -webkit-text-stroke: 1px #fff;
+}
+
+.btn:before{
+  width: 0;
+  height: calc(100% - 16px);
+  will-change: width;
+  -webkit-transition: width .5s cubic-bezier(0.96, 0.18, 0.1, 0.88);
+  transition: width .5s cubic-bezier(0.96, 0.18, 0.1, 0.88);
+}
+
+.btn:hover:before, .btn:focus:before{
+  width: calc(100% - 50px);
+}
+
+.button{
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media screen and (max-width: 640px){
+  .button{
+    padding: 5px 15px;
+    font-size: 30px;
+  }
+  .button:not(:first-of-type){
+    margin-top: 20px;
+  }
+  .button:before{
+    top: 5px;
+    left: 15px;
+  }
+  .btn:before{
+    height: calc(100% - 10px);
+  }
+  .btn:hover:before, .btn:focus:before{
+    width: calc(100% - 30px);
+  }
+}
+
+@media screen and (min-width: 768px){
+  html{
+    font-size: 62.5%;
+  }
+}
+
+@media screen and (max-width: 767px){
+  html{
+    font-size: 50%;
+  }
+}
