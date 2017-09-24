@@ -33,6 +33,7 @@
         vm.replay = function() { var optionTable = firebaseService.getAll().$add({option: 2}); }
         vm.merge = function() { var optionTable = firebaseService.getAll().$add({option: 3}); }
         vm.replayMerge = function() { var optionTable = firebaseService.getAll().$add({option: 4}); }
+        vm.customize = function() { var optionTable = firebaseService.getAll().$add({option: 5}); }
         vm.closedHiHat = function() { }
         vm.kickA = function() { }
         vm.kickB = function() { }
