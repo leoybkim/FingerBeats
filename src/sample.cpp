@@ -227,32 +227,61 @@ int main (int argc, char** argv) {
                     std::cout << i << ": " << beatNames[i] << std::endl;
                 }
                 std::cout << "explore the sound by type index! (enter -1 to go next)" << std::endl;
-                int choice;
-                std::cin >> choice; // doesn't provide error handling - just assume users are smart
-                if (choice == -1) break;
+                int choice = -2;
+                inFile.close();
+                std::ifstream inFile;
+                inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
+                
+                while (choice == -2) {
+                    inFile >> choice;
+                }
+                if (choice == -1) {
+                    break;
+                }
                 play_cmd += "../wav/" + beatNames[choice] + ".wav";
                 system(play_cmd.c_str());
             }
+
+            cir_beat = -2;
+            tap_beat = -2;
+            swipe_beat = -2;
+
             std::cout << "beat for circular motion: ";
-            std::cin >> cir_beat;
+            inFile.close();
+            std::ifstream inFile;
+            inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
+            //while (cir_beat < 0) {
+            inFile >> cir_beat;
+            //}
+
+            std::cout << "choice: " << cir_beat << std::endl;
 
             std::cout << "beat for swipe motion: ";
-            std::cin >> swipe_beat;
+            inFile.close();
+            inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
+            while (swipe_beat < 0) {
+                inFile >> swipe_beat;
+            }
+            inFile >> swipe_beat;
+            std::cout << "choice: " << swipe_beat << std::endl;
 
             std::cout << "beat for tap motion: ";
-            std::cin >> tap_beat;
-        }
-        else if (response == -1) {
+            inFile.close();
+            inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
+            while (tap_beat < 0) {
+                inFile >> tap_beat;
+            }
 
-            break;
-        } else if (response == -2) {}
-        else {
+            std::cout << "choice: " << tap_beat << std::endl;
+            inFile.close();
+        }
+        else if (response == -2) {
+            // blind: do nothing
+        } else {
             std::cout << "invalide input" << std::endl; 
             break;
-        } 
+        }
         inFile.close();
-        remove("test.txt");
-        usleep(1000);
     }
     std::cout << "Thanks for using!" << std::endl;
 
