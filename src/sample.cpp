@@ -227,14 +227,8 @@ int main (int argc, char** argv) {
                     std::cout << i << ": " << beatNames[i] << std::endl;
                 }
                 std::cout << "explore the sound by type index! (enter -1 to go next)" << std::endl;
-                int choice = -2;
-                inFile.close();
-                std::ifstream inFile;
-                inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
-                
-                while (choice == -2) {
-                    inFile >> choice;
-                }
+                int choice;
+                std::cin >> choice; // doesn't provide error handling - just assume users are smart
                 if (choice == -1) {
                     break;
                 }
@@ -242,38 +236,14 @@ int main (int argc, char** argv) {
                 system(play_cmd.c_str());
             }
 
-            cir_beat = -2;
-            tap_beat = -2;
-            swipe_beat = -2;
-
             std::cout << "beat for circular motion: ";
-            inFile.close();
-            std::ifstream inFile;
-            inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
-            //while (cir_beat < 0) {
-            inFile >> cir_beat;
-            //}
-
-            std::cout << "choice: " << cir_beat << std::endl;
+            std::cin >> cir_beat;
 
             std::cout << "beat for swipe motion: ";
-            inFile.close();
-            inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
-            while (swipe_beat < 0) {
-                inFile >> swipe_beat;
-            }
-            inFile >> swipe_beat;
-            std::cout << "choice: " << swipe_beat << std::endl;
+            std::cin >> swipe_beat;
 
             std::cout << "beat for tap motion: ";
-            inFile.close();
-            inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
-            while (tap_beat < 0) {
-                inFile >> tap_beat;
-            }
-
-            std::cout << "choice: " << tap_beat << std::endl;
-            inFile.close();
+            std::cin >> tap_beat;
         }
         else if (response == -2) {
             // blind: do nothing
