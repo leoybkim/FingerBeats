@@ -4,6 +4,7 @@
 #include <thread>
 #include <unistd.h>
 #include <errno.h>
+#include <fstream>
 
 using namespace Leap;
 
@@ -153,6 +154,17 @@ void SampleListener::onFrame(const Controller& controller) {
   }
 }
 
+void menu () {
+    std::cout << "menu" << std::endl;
+    std::cout << "options:" << std::endl;
+    std::cout << "1 for recording 10 seconds" << std::endl;
+    std::cout << "2 for replay latest beats" << std::endl;
+    std::cout << "3 for a magic merge" << std::endl;
+    std::cout << "4 for playing the merged beats" << std::endl;
+    std::cout << "5 choose your own beats options!" << std::endl;
+    std::cout << "-1 for exit" << std::endl; 
+}
+
 int main (int argc, char** argv) {
     int response = 0;
     int file_ctr = 0;
@@ -167,17 +179,17 @@ int main (int argc, char** argv) {
         std::string play_cmd = "play ";
         std::string mix_cmd = "sox --combine mix";
 
-        std::cout << "menu" << std::endl;
-        std::cout << "options:" << std::endl;
-        std::cout << "1 for recording 10 seconds" << std::endl;
-        std::cout << "2 for replay latest beats" << std::endl;
-        std::cout << "3 for a magic merge" << std::endl;
-        std::cout << "4 for playing the merged beats" << std::endl;
-        std::cout << "5 choose your own beats options!" << std::endl;
-        std::cout << "-1 for exit" << std::endl; 
-        std::cin >> response;
+        //menu();
+        //std::cin >> response;
+
+        std::ifstream inFile;
+        inFile.open("/Users/chenyihan/Desktop/FingerBeats/src/test.txt");
+        if (!inFile) response = -2;
+
+        inFile >> response;
 
         if (response == 1) {
+
             file_ctr++;
 
             file_name = file_pre + (char) (file_ctr + '0') + ".wav";
@@ -205,7 +217,9 @@ int main (int argc, char** argv) {
             }
         } else if (response == 4) {
             play_cmd += "../wav/mixed.wav";
-            system(play_cmd.c_str());
+            for (int i = 0; i < 3; i++) {
+                system(play_cmd.c_str());
+            }
         } else if (response == 5) {
             while (1) {
                 play_cmd = "play ";
@@ -227,16 +241,19 @@ int main (int argc, char** argv) {
 
             std::cout << "beat for tap motion: ";
             std::cin >> tap_beat;
-
         }
         else if (response == -1) {
+
             break;
-        } else {
+        } else if (response == -2) {}
+        else {
             std::cout << "invalide input" << std::endl; 
             break;
         } 
+        inFile.close();
+        remove("test.txt");
+        usleep(1000);
     }
-
     std::cout << "Thanks for using!" << std::endl;
 
     return 0;
