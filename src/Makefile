@@ -20,3 +20,6 @@ endif
 
 clean:
 	rm -rf Sample Sample.dSYM
+	rm -rf ../wav/beats1.wav
+	rm -rf ../wav/beats2.wav
+	rm -rf ../wav/mixed.wav
