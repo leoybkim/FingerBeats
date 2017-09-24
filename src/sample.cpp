@@ -8,20 +8,28 @@
 using namespace Leap;
 
 const std::string stateNames[] = {"STATE_INVALID", "STATE_START", "STATE_UPDATE", "STATE_END"};
-const std::string beatNames[] = {"closed-hi-hat", "kickA", "kickB", "open-hi-hat", "snare"};
-const int swipe_max = 14;
-const int cir_max = 32;
+const std::string beatNames[] = {"closed-hi-hat", "kickA", "kickB", "open-hi-hat", "snare",
+                                 "AWESOME", "BOING_", "CALC", "CALC2", "CASH_REG", "CONICAL",
+                                 "SPRING_B", "TINK", "TWINGY", "UPPER", "VICTORY", "WATER_GL"
+                                };
+const int SWIPE_MAX = 14;
+const int CIR_MAX = 32;
+const int BEAT_SIZE = 17;
 
 int beat_index = -1;
 int swipe_ctr = 0;
 int cir_ctr = 0;
-//int response;
+
+// default beats
+int cir_beat = 3;
+int swipe_beat = 4;
+int tap_beat = 0;
 
 void sound(int index) {
     
     int pid = fork();
     if (pid == 0) {
-        std::string file = beatNames[index] + ".wav";
+        std::string file = "../wav/" + beatNames[index] + ".wav";
         execlp("afplay", "afplay", file.c_str(), NULL);
         std::cout << "Exec failed: " << strerror(errno) << std::endl;
         exit(-1);
@@ -47,7 +55,6 @@ void SampleListener::onFrame(const Controller& controller) {
 
     beat_index = -1; // initialize it to unvalid value
     Frame frame = controller.frame();
-    //response = frame.fingers().count();
 
     // Get gestures
     const GestureList gestures = frame.gestures();
@@ -60,11 +67,11 @@ void SampleListener::onFrame(const Controller& controller) {
 
         cir_ctr++;
         if (cir_ctr == 3) {
-            beat_index = 3;
-        } else if (cir_ctr > cir_max) {
+            beat_index = cir_beat;
+        } else if (cir_ctr > CIR_MAX) {
             cir_ctr = 0;
         }
-
+        /*
         CircleGesture circle = gesture;
         std::string clockwiseness;
 
@@ -74,7 +81,7 @@ void SampleListener::onFrame(const Controller& controller) {
           clockwiseness = "counterclockwise";
         }
 
-        /*
+        
         // Calculate angle swept since last frame
         float sweptAngle = 0;
         if (circle.state() != Gesture::STATE_START) {
@@ -96,8 +103,8 @@ void SampleListener::onFrame(const Controller& controller) {
         
         swipe_ctr++;
         if (swipe_ctr == 1) {
-            beat_index = 4;
-        } else if (swipe_ctr > swipe_max) {
+            beat_index = swipe_beat;
+        } else if (swipe_ctr > SWIPE_MAX) {
             swipe_ctr = 0;
         }
         /*
@@ -112,7 +119,7 @@ void SampleListener::onFrame(const Controller& controller) {
       }
       case Gesture::TYPE_KEY_TAP:
       {
-        beat_index = 0;
+        beat_index = tap_beat;
         /*
         KeyTapGesture tap = gesture;
         std::cout << std::string(2, ' ')
@@ -154,7 +161,7 @@ int main (int argc, char** argv) {
     Controller controller;
 
     while (1) {
-        std::string file_pre = "beats";
+        std::string file_pre = "../wav/beats";
         std::string file_name = "";
         std::string record_cmd = "sox -b 32 -e unsigned-integer -r 96k -c 2 -d --clobber --buffer $((96000*2*10)) ";
         std::string play_cmd = "play ";
@@ -166,10 +173,10 @@ int main (int argc, char** argv) {
         std::cout << "2 for replay latest beats" << std::endl;
         std::cout << "3 for a magic merge" << std::endl;
         std::cout << "4 for playing the merged beats" << std::endl;
+        std::cout << "5 choose your own beats options!" << std::endl;
         std::cout << "-1 for exit" << std::endl; 
         std::cin >> response;
 
-        std::cout << response << std::endl;
         if (response == 1) {
             file_ctr++;
 
@@ -190,16 +197,40 @@ int main (int argc, char** argv) {
                 for (int i = 1; i <= file_ctr; i++) {
                     mix_cmd += " " + file_pre + (char)('0' + i) + ".wav";
                 }
-                mix_cmd += " mixed.wav";
+                mix_cmd += " ../wav/mixed.wav";
                 std::cout << mix_cmd << std::endl;
                 system(mix_cmd.c_str());
+            } else {
+                std::cout << ">1 file needed" <<std::endl;
             }
         } else if (response == 4) {
-            play_cmd += "mixed.wav";
+            play_cmd += "../wav/mixed.wav";
             system(play_cmd.c_str());
-        } else if (response == -1) {
+        } else if (response == 5) {
+            while (1) {
+                play_cmd = "play ";
+                for (int i = 0; i < BEAT_SIZE; i++) {
+                    std::cout << i << ": " << beatNames[i] << std::endl;
+                }
+                std::cout << "explore the sound by type index! (enter -1 to go next)" << std::endl;
+                int choice;
+                std::cin >> choice; // doesn't provide error handling - just assume users are smart
+                if (choice == -1) break;
+                play_cmd += "../wav/" + beatNames[choice] + ".wav";
+                system(play_cmd.c_str());
+            }
+            std::cout << "beat for circular motion: ";
+            std::cin >> cir_beat;
+
+            std::cout << "beat for swipe motion: ";
+            std::cin >> swipe_beat;
+
+            std::cout << "beat for tap motion: ";
+            std::cin >> tap_beat;
+
+        }
+        else if (response == -1) {
             break;
-        } else if (response == 0) {
         } else {
             std::cout << "invalide input" << std::endl; 
             break;
